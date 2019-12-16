@@ -30,7 +30,7 @@ class MenuLeft extends React.Component{
             "inbox"
         ]
         return(
-            <div style={{width:'200px'}}>
+            <div style={{width:'250px',height:"100vh"}}>
                 {/* <div className='header-menu'>
                     <div style={{display:this.state.collapsed ? "" : }}>
                         <img src='/icon.png' className='icon'/>
@@ -46,8 +46,9 @@ class MenuLeft extends React.Component{
                     mode='inline'
                     theme='dark'
                     inlineCollapsed={this.state.collapsed}
+                    className='leftMenu'
                 >
-                    <Menu.Item key='0' onClick={this.toogleMenu} style={{background:"linear-gradient(to right, #ff9d01, #ffaa01)"}}>
+                    <Menu.Item key='0' onClick={this.toogleMenu} style={{background:"linear-gradient(to right, #ff9d01, #ffaa01)",height:"5vh"}}>
                         <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}></Icon>
                         <span style={{fontSize:'1.4rem'}}>TTAN</span>
                     </Menu.Item>
