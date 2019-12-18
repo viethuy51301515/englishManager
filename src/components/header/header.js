@@ -1,14 +1,13 @@
 import React from 'react';
-import {Icon,Dropdown} from 'antd';
+import {Icon,Dropdown,Menu} from 'antd';
+import MenuItem from 'antd/lib/menu/MenuItem';
+import './header.scss'
 class Header extends React.Component{
     constructor(props){
         super(props);
     }
 
     render(){
-        const languageMenu = {
-        
-        }
         return(
             <div>
                 <div className='user-title'>
@@ -23,9 +22,15 @@ class Header extends React.Component{
                     <img src="./user.png" alt=""/>
                 </div>
                 <div className='language'>
-                    <Dropdown>
                         <Icon type="global" />
-                    </Dropdown>
+                        <Icon type='down'/>
+                </div>
+                <div>
+                <Menu>
+                    <Menu.Item key="1">1st menu item</Menu.Item>
+                    <Menu.Item key="2">2nd memu item</Menu.Item>
+                    <Menu.Item key="3">3rd menu item</Menu.Item>
+                </Menu>
                 </div>
             </div>
         )
