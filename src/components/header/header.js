@@ -5,11 +5,20 @@ import './header.scss'
 class Header extends React.Component{
     constructor(props){
         super(props);
+        this.state={
+            toggleLanguage:false
+        }
+        this.toggleLang = this.toggleLang.bind(this);
     }
-
+    toggleLang(){
+        this.setState({
+            toggleLanguage:!this.state.toggleLanguage
+            }
+        )
+    }
     render(){
         return(
-            <div>
+            <div className='header-title'>
                 <div className='user-title'>
                     <h5 className='item-tilte'>
                         Huy Phan
@@ -18,19 +27,23 @@ class Header extends React.Component{
                         admin
                     </span>
                 </div>
-                <div>
+                <div className='image-profile'>
                     <img src="./user.png" alt=""/>
                 </div>
                 <div className='language'>
-                        <Icon type="global" />
-                        <Icon type='down'/>
+                        <Icon type="global" onClick={this.toggleLang}/>
+                        <h5 onClick={this.toggleLang}>EN</h5>
+                        <Icon type='down' onClick={this.toggleLang}/>
                 </div>
-                <div>
-                <Menu>
-                    <Menu.Item key="1">1st menu item</Menu.Item>
-                    <Menu.Item key="2">2nd memu item</Menu.Item>
-                    <Menu.Item key="3">3rd menu item</Menu.Item>
-                </Menu>
+                <div style={{width:120}} className={this.state.toggleLanguage ? 'dropdown-lang show' : 'dropdown-lang'}>
+                    <Menu
+                        mode='inline'
+                        theme='dark'
+                        
+                    >
+                        <Menu.Item key="1">English</Menu.Item>
+                        <Menu.Item key="2">Tieng Viet</Menu.Item>
+                    </Menu>
                 </div>
             </div>
         )

@@ -3,18 +3,20 @@ import './menu.scss';
 import { Menu, Icon, Button } from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
 const { SubMenu } = Menu;
+const menuWidth = '250px';
 class MenuLeft extends React.Component{
     constructor(props){
         super(props)
         this.state = {
             collapsed:true,
-            menuWidth:'100%'
+            menuWidth:'auto'
         }
         this.toogleMenu = this.toogleMenu.bind(this);
     }
     toogleMenu(){
         this.setState({
-            collapsed:!this.state.collapsed
+            collapsed:!this.state.collapsed,
+            menuWidth: this.state.menuWidth == 'auto' ? menuWidth : 'auto'
         })
     }
     render(){
@@ -30,16 +32,7 @@ class MenuLeft extends React.Component{
             "inbox"
         ]
         return(
-            <div style={{width:'250px',height:"100vh"}}>
-                {/* <div className='header-menu'>
-                    <div style={{display:this.state.collapsed ? "" : }}>
-                        <img src='/icon.png' className='icon'/>
-                        <h3>TTAN</h3>
-                    </div>
-                    <Button type='primary' onClick={this.toogleMenu} className='menu-button'>
-                        <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}></Icon>
-                    </Button>
-                </div> */}
+            <div style={{width:this.state.menuWidth,height:"100vh"}} id='test123'>
                 <Menu 
                     defaultSelectedKeys={['1']}
                     defaultOpenKeys={['sub1']}
@@ -48,7 +41,7 @@ class MenuLeft extends React.Component{
                     inlineCollapsed={this.state.collapsed}
                     className='leftMenu'
                 >
-                    <Menu.Item key='0' onClick={this.toogleMenu} style={{background:"linear-gradient(to right, #ff9d01, #ffaa01)",height:"5vh"}}>
+                    <Menu.Item key='0' onClick={this.toogleMenu} style={{background:"linear-gradient(to right, #ff9d01, #ffaa01)",height:"9vh"}}>
                         <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}></Icon>
                         <span style={{fontSize:'1.4rem'}}>TTAN</span>
                     </Menu.Item>
