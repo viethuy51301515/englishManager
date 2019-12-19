@@ -32,10 +32,8 @@ class MenuLeft extends React.Component{
             "inbox"
         ]
         return(
-            <div style={{width:this.state.menuWidth,height:"100vh"}} id='test123'>
+            <div style={{width:this.state.menuWidth,height:"100vh"}} id='menu-layout'>
                 <Menu 
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
                     mode='inline'
                     theme='dark'
                     inlineCollapsed={this.state.collapsed}

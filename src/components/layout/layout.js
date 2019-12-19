@@ -15,8 +15,10 @@ class Layout extends React.Component{
                     <Header />
                     <div className='main-layout'>  
                         <div className='main-title'>
-                        </div>                    
-                        <StudentList />
+                        </div>
+                        <div className="main-body">                    
+                            <StudentList />
+                        </div>
                     </div>
                 </div>
 
