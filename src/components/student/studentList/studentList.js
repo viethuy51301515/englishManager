@@ -57,18 +57,18 @@ class StudentList extends React.Component{
             text
           ),
       });
-      handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        this.setState({
-          searchText: selectedKeys[0],
-          searchedColumn: dataIndex,
-        });
-      };
-    
-      handleReset = clearFilters => {
-        clearFilters();
-        this.setState({ searchText: '' });
-      };
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+      confirm();
+      this.setState({
+        searchText: selectedKeys[0],
+        searchedColumn: dataIndex,
+      });
+    };
+  
+    handleReset = clearFilters => {
+      clearFilters();
+      this.setState({ searchText: '' });
+    };
     render(){
         const columns = [
             {
@@ -102,6 +102,16 @@ class StudentList extends React.Component{
                 title:"tags",
                 key:"tags",
                 dataIndex:"tags",   
+            },
+            {
+              title:"",
+                key:"action",
+                dataIndex:"action",   
+                render: (text, record) =>(
+                    <span>
+                      <Icon type='delete' />
+                    </span>
+                )
             }
         ]
         const data = [
@@ -163,12 +173,12 @@ class StudentList extends React.Component{
                 <div style={{background:'white',padding:"15px"}}>
                     <div>
                         <h3>All Students</h3>
-                        <a href="_blank"> ...</a>
+                        <Icon type='reload' style={{color:'orange'}} onClick="" />
                     </div>
                     <div className='layoutSearch'>
                         <Input placeholder="Search by student name"></Input>
                         <Input placeholder="Search by class name"></Input>
-                        <Button type="primary"> Search</Button>
+                        <Button type="primary" style={{background:'orange'}}> Search</Button>
                     </div>
                     <Table style={{border: '1px solid #e0e0e0'}} columns={columns} dataSource={data} pagination={{pageSize:50}}/>
                 </div>
