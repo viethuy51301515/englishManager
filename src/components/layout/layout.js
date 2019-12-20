@@ -3,6 +3,7 @@ import MenuLeft from '../menu'
 import Header from '../header';
 import './layout.scss';
 import StudentList from '../student/studentList';
+import Student from '../student'
 class Layout extends React.Component{
     constructor(props){
         super(props);
@@ -17,7 +18,7 @@ class Layout extends React.Component{
                         <div className='main-title'>
                         </div>
                         <div className="main-body">                    
-                            <StudentList />
+                            <Student />
                         </div>
                     </div>
                 </div>
