@@ -15,8 +15,6 @@ class Layout extends React.Component{
                 <div className='left-layout'>
                     <Header />
                     <div className='main-layout'>  
-                        <div className='main-title'>
-                        </div>
                         <div className="main-body">                    
                             <Student />
                         </div>

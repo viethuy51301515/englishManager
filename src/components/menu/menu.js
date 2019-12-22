@@ -8,8 +8,8 @@ class MenuLeft extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            collapsed:true,
-            menuWidth:'auto'
+            collapsed:false,
+            menuWidth:menuWidth
         }
         this.toogleMenu = this.toogleMenu.bind(this);
     }

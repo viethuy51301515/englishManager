@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon,Dropdown,Menu} from 'antd';
+import {Icon,Dropdown,Menu,Popover} from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import './header.scss'
 class Header extends React.Component{
@@ -17,6 +17,18 @@ class Header extends React.Component{
         )
     }
     render(){
+        const content = (
+            <div>
+                <Menu
+                    mode='inline'
+                    theme='light'
+                    
+                >
+                    <Menu.Item key="1">English</Menu.Item>
+                    <Menu.Item key="2">Tieng Viet</Menu.Item>
+                </Menu>
+            </div>
+        )
         return(
             <div className='header-title'>
                 <div className='user-title'>
@@ -30,12 +42,16 @@ class Header extends React.Component{
                 <div className='image-profile'>
                     <img src="./user.png" alt=""/>
                 </div>
-                <div className='language'>
-                        <Icon type="global" onClick={this.toggleLang}/>
-                        <h5 onClick={this.toggleLang}>EN</h5>
-                        <Icon type='down' onClick={this.toggleLang}/>
-                </div>
-                <div style={{width:120}} className={this.state.toggleLanguage ? 'dropdown-lang show' : 'dropdown-lang'}>
+                <Popover placement='bottomLeft' trigger='click' content={content}> 
+                    <div className='language'>
+
+                            <Icon type="global" onClick={this.toggleLang}/>
+                            <h5 onClick={this.toggleLang}>EN</h5>
+                            <Icon type='down' onClick={this.toggleLang}/>
+    
+                    </div>
+                </Popover>  
+                {/* <div style={{width:120}} className={this.state.toggleLanguage ? 'dropdown-lang show' : 'dropdown-lang'}>
                     <Menu
                         mode='inline'
                         theme='dark'
@@ -44,7 +60,7 @@ class Header extends React.Component{
                         <Menu.Item key="1">English</Menu.Item>
                         <Menu.Item key="2">Tieng Viet</Menu.Item>
                     </Menu>
-                </div>
+                </div> */}
             </div>
         )
     }
