@@ -3,6 +3,7 @@ import {Input,Button,Popconfirm} from 'antd';
 import './event.scss';
 import {useState} from 'react';
 import marked from 'marked'
+import {eventRef} from '../../firebase';
 const {TextArea} = Input;
 const Constant = {
     'TUADE':"td",
@@ -24,7 +25,11 @@ const Event = (props)=>{
         setText(text.value);
     }
     const saveEvent = ()=>{
-        
+        eventRef.push({
+            content:text.split("\n").join('\\n'),
+            date:new Date(),
+
+        });
     }
     const buttonEvent =(type)=>{
         switch (type) {
@@ -59,6 +64,7 @@ const Event = (props)=>{
     return(
         <div className='event-layout'>
             <div className='edit-layout'>
+                <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 1, maxRows: 2 }}/>
                 <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 15, maxRows: 20 }}/>
                 <div className='group-buttons'>
                 <Button type="primary" size='small' onClick={()=>{buttonEvent(Constant.TUADE)}}>
