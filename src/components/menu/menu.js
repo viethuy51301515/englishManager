@@ -2,8 +2,10 @@ import React from 'react';
 import './menu.scss';
 import { Menu, Icon, Button } from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
+import {Link} from 'react-router-dom'
 const { SubMenu } = Menu;
 const menuWidth = '250px';
+
 class MenuLeft extends React.Component{
     constructor(props){
         super(props)
@@ -48,29 +50,23 @@ class MenuLeft extends React.Component{
                         title={
                             <span>
                                 <Icon type='mail'/>
-                                <span>Navigation 1</span>
+                                <span>Student</span>
                             </span>
                         }
                     >
-                        <MenuItem key='nav1'>
-                            <Icon type='mail' />
-                            <span>nav 1</span>
-                        </MenuItem>
-                        <MenuItem key='nav2'>
-                            <Icon type='mail' />
-                            <span>nav 1</span>
-                        </MenuItem>
+                            <MenuItem key='nav1'>
+                                <Icon type='mail' />
+                                <span><Link to='/studentList'> Student List </Link></span>
+                            </MenuItem>
+                            <MenuItem key='nav2'>
+                                <Icon type='mail' />
+                                <span><Link to='/student'> Student Detail </Link></span>
+                            </MenuItem>
                     </SubMenu>
-                    {
-                        iconClass.map((item,index) => {
-                            return (
-                                <Menu.Item key={index}>
-                                    <Icon type={item}></Icon>
-                                    <span>option {index}</span>
-                                </Menu.Item>
-                            )
-                        })
-                    }
+                    <Menu.Item key='event'>
+                        <Icon type='mail'></Icon>
+                        <span><Link to='/editEvent'> Edit Content </Link></span>
+                    </Menu.Item>
                 </Menu>
             </div>
         )
