@@ -1,8 +1,9 @@
 import React from 'react';
 import {Icon,Dropdown,Menu,Popover} from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
-import './header.scss'
-class Header extends React.Component{
+import './header.scss';
+import {connect} from 'react-redux';
+class HeaderTemp extends React.Component{
     constructor(props){
         super(props);
         this.state={
@@ -33,7 +34,7 @@ class Header extends React.Component{
             <div className='header-title'>
                 <div className='user-title'>
                     <h5 className='item-tilte'>
-                        Huy Phan
+                        {this.props.data.email}
                     </h5>
                     <span className='role'>
                         admin
@@ -65,4 +66,10 @@ class Header extends React.Component{
         )
     }
 }
+const mapStateToProp = (state)=>{
+    return{
+        data:state.login
+    }
+}
+const Header = connect(mapStateToProp,null)(HeaderTemp)
 export default Header;

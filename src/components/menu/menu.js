@@ -55,17 +55,23 @@ class MenuLeft extends React.Component{
                         }
                     >
                             <MenuItem key='nav1'>
-                                <Icon type='mail' />
-                                <span><Link to='/studentList'> Student List </Link></span>
+                                <Link to='/studentList'>
+                                    <Icon type='mail' />
+                                    <span> Student List</span>
+                                </Link>
                             </MenuItem>
                             <MenuItem key='nav2'>
-                                <Icon type='mail' />
-                                <span><Link to='/student'> Student Detail </Link></span>
+                                <Link to='/student'> 
+                                    <Icon type='mail' />
+                                    <span>Student Detail</span>
+                                </Link>
                             </MenuItem>
                     </SubMenu>
                     <Menu.Item key='event'>
-                        <Icon type='mail'></Icon>
-                        <span><Link to='/editEvent'> Edit Content </Link></span>
+                        <Link to='/editEvent'> 
+                            <Icon type='mail'></Icon>
+                            <span>Edit Content </span>
+                        </Link>
                     </Menu.Item>
                 </Menu>
             </div>

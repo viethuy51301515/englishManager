@@ -12,4 +12,5 @@ const config = {
 firebase.initializeApp(config);
 const databaseRef = firebase.database().ref();
 export const eventRef = databaseRef.child("news_event");
+export const authLogin = firebase.auth();
 

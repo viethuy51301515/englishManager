@@ -28,7 +28,8 @@ const Event = (props)=>{
         eventRef.push({
             content:text.split("\n").join('\\n'),
             date:new Date(),
-
+            image:document.getElementById("main-image").value,
+            title:document.getElementById("title-display").value
         });
     }
     const buttonEvent =(type)=>{
@@ -64,8 +65,9 @@ const Event = (props)=>{
     return(
         <div className='event-layout'>
             <div className='edit-layout'>
-                <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 1, maxRows: 2 }}/>
-                <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 15, maxRows: 20 }}/>
+                <TextArea id='title-display'  placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 1, maxRows: 2 }}/>
+                <Input id='main-image' placeholder='hình ảnh lớn'></Input>
+                <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 12, maxRows: 12 }}/>
                 <div className='group-buttons'>
                 <Button type="primary" size='small' onClick={()=>{buttonEvent(Constant.TUADE)}}>
                     tựa đề

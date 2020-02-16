@@ -3,15 +3,37 @@ import MenuLeft from '../menu'
 import Header from '../header';
 import './layout.scss';
 import StudentList from '../student/studentList';
-import Student from '../student'
+import Student from '../student';
+import Login from '../../components/login';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import Event from '../event';
-import {BrowserRouter as Router, Switch,Route,Link,useRouteMatch} from 'react-router-dom'
-class Layout extends React.Component{
+import {BrowserRouter as Router, Switch,Route,Link,useRouteMatch,Redirect} from 'react-router-dom';
+import {useSelector,connect} from 'react-redux';
+
+const ProtectedRoute = ({component:Component,...rest})=>{
+    const authUser = useSelector(state => state.login)
+    return(
+        <Route {...rest} render={(props) => (
+            authUser.isLoggedIn === true
+              ? <Component {...props} />
+              : <Redirect to='/login' />
+          )} />
+    )
+}
+class LayoutItem extends React.Component{
     constructor(props){
         super(props);
     }
     render(){
+        // const authUser = useSelector(state => state.login)
+        // if(this.props.data.isLoggedIn ===  false){
+        //     return(
+        //         <Router>
+        //             <ProtectedRoute exact path='/' component={Event} />
+        //             <Route exact path='/login' component={Login} />
+        //         </Router>
+        //     )
+        // }
         return(
            <Router>
             <div className='layout'>
@@ -21,9 +43,11 @@ class Layout extends React.Component{
                     <div className='main-layout'>  
                         <div className="main-body">  
                         <Switch>
-                            <Route  exact path='/student' component={Student} />
-                            <Route exact path='/studentList' component={StudentList} />
-                            <Route exact path='/editEvent' component={Event} />
+                            <ProtectedRoute exact path='/' component={Event} />
+                            <Route exact path='/login' component={Login} />
+                            <ProtectedRoute  exact path='/student' component={Student} />
+                            <ProtectedRoute exact path='/studentList' component={StudentList} />
+                            <ProtectedRoute exact path='/editEvent' component={Event} />
                         </Switch>                  
                         </div>
                     </div>
@@ -35,4 +59,12 @@ class Layout extends React.Component{
         )
     }
 }
+const mapStateToProp = (state)=>{
+    return(
+        {
+            data:state.login
+        }
+    )
+}
+const Layout = connect(mapStateToProp,null)(LayoutItem);
 export default Layout;
