@@ -9,7 +9,10 @@ const loginReducer  = (state=defaultV,action) =>{
             state.email = action.email;
             state.isLoggedIn = true;
             return state;
-    
+        case 'logout':
+            state.email="";
+            state.isLoggedIn=false;
+            localStorage.setItem("email","");
         default:
             break;
     }

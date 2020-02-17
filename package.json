@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
-    "antd": "^3.26.4",
+    "antd": "^3.26.10",
     "firebase": "^7.8.2",
     "firebase-tools": "^7.13.0",
     "marked": "^0.8.0",

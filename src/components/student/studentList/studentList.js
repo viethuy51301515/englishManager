@@ -224,7 +224,7 @@ class StudentList extends React.Component{
                         <Icon type='reload' style={{color:'orange'}} onClick="/" />
                         <Icon type='delete' style={{color:'red'}} onClick="/" />
                     </div>
-                    <div className='layoutSearch'>
+                    <div className='layoutSearch'>k
                         <Input placeholder="Search by student name"></Input>
                         <Input placeholder="Search by class name"></Input>
                         <Button type="primary" style={{background:'orange'}}> Search</Button>

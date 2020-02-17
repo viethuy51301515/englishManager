@@ -7,15 +7,17 @@ import Student from '../student';
 import Login from '../../components/login';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import Event from '../event';
+import {login} from '../../action/action';
 import {BrowserRouter as Router, Switch,Route,Link,useRouteMatch,Redirect} from 'react-router-dom';
 import {useSelector,connect} from 'react-redux';
 
 const ProtectedRoute = ({component:Component,...rest})=>{
     const authUser = useSelector(state => state.login)
+    // var email = localStorage.getItem("email");
     return(
         <Route {...rest} render={(props) => (
             authUser.isLoggedIn === true
-              ? <Component {...props} />
+              ? <Component {...props}/>
               : <Redirect to='/login' />
           )} />
     )
@@ -23,17 +25,16 @@ const ProtectedRoute = ({component:Component,...rest})=>{
 class LayoutItem extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            email:''
+        }
+    }
+    componentWillMount(){
+        if(localStorage.getItem("email") != ""){
+            this.props.setEmail(localStorage.getItem("email"));
+        }
     }
     render(){
-        // const authUser = useSelector(state => state.login)
-        // if(this.props.data.isLoggedIn ===  false){
-        //     return(
-        //         <Router>
-        //             <ProtectedRoute exact path='/' component={Event} />
-        //             <Route exact path='/login' component={Login} />
-        //         </Router>
-        //     )
-        // }
         return(
            <Router>
             <div className='layout'>
@@ -44,7 +45,7 @@ class LayoutItem extends React.Component{
                         <div className="main-body">  
                         <Switch>
                             <ProtectedRoute exact path='/' component={Event} />
-                            <Route exact path='/login' component={Login} />
+                            <Route exact path='/login'  render={(props) => <Login {...props} /> }/>
                             <ProtectedRoute  exact path='/student' component={Student} />
                             <ProtectedRoute exact path='/studentList' component={StudentList} />
                             <ProtectedRoute exact path='/editEvent' component={Event} />
@@ -66,5 +67,12 @@ const mapStateToProp = (state)=>{
         }
     )
 }
-const Layout = connect(mapStateToProp,null)(LayoutItem);
+const mapDispatchToProps = (dipatch)=>{
+    return{
+        setEmail:(email)=>{
+            dipatch(login(email));
+        }
+    }
+}
+const Layout = connect(mapStateToProp,mapDispatchToProps)(LayoutItem);
 export default Layout;

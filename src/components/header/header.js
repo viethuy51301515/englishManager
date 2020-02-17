@@ -3,6 +3,8 @@ import {Icon,Dropdown,Menu,Popover} from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import './header.scss';
 import {connect} from 'react-redux';
+import {logout} from '../../action/action';
+var email = localStorage.getItem("email");
 class HeaderTemp extends React.Component{
     constructor(props){
         super(props);
@@ -10,6 +12,11 @@ class HeaderTemp extends React.Component{
             toggleLanguage:false
         }
         this.toggleLang = this.toggleLang.bind(this);
+        this.logOut = this.logOut.bind(this);
+    }
+    logOut(){
+        this.props.logout();
+        window.location = '/';
     }
     toggleLang(){
         this.setState({
@@ -34,7 +41,7 @@ class HeaderTemp extends React.Component{
             <div className='header-title'>
                 <div className='user-title'>
                     <h5 className='item-tilte'>
-                        {this.props.data.email}
+                        {email}
                     </h5>
                     <span className='role'>
                         admin
@@ -43,7 +50,12 @@ class HeaderTemp extends React.Component{
                 <div className='image-profile'>
                     <img src="./user.png" alt=""/>
                 </div>
-                <Popover placement='bottomLeft' trigger='click' content={content}> 
+                <div>
+                    <a onClick={this.logOut}>
+                        log out
+                    </a>
+                </div>
+                {/* <Popover placement='bottomLeft' trigger='click' content={content}> 
                     <div className='language'>
 
                             <Icon type="global" onClick={this.toggleLang}/>
@@ -51,7 +63,7 @@ class HeaderTemp extends React.Component{
                             <Icon type='down' onClick={this.toggleLang}/>
     
                     </div>
-                </Popover>  
+                </Popover>   */}
                 {/* <div style={{width:120}} className={this.state.toggleLanguage ? 'dropdown-lang show' : 'dropdown-lang'}>
                     <Menu
                         mode='inline'
@@ -71,5 +83,12 @@ const mapStateToProp = (state)=>{
         data:state.login
     }
 }
-const Header = connect(mapStateToProp,null)(HeaderTemp)
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        logout:()=>{
+            dispatch(logout());
+        }
+    }
+}
+const Header = connect(mapStateToProp,mapDispatchToProps)(HeaderTemp)
 export default Header;

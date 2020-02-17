@@ -5,7 +5,7 @@ import {authLogin} from '../../firebase';
 import {useState} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import login from '../../action/action';
+import {login} from '../../action/action';
 const LoginForm = (props)=>{
     const dispatch = useDispatch();
     const { getFieldDecorator } = props.form;
@@ -21,6 +21,8 @@ const LoginForm = (props)=>{
                 description:'Bạn vừa đăng nhập thành công.'
             })
             dispatch(login(res.user.email));
+            // props.setEmail(res.user.email);
+            localStorage.setItem("email",res.user.email);
             setLogg(true);
         }).catch(function(error) {
             var errorCode = error.code;
@@ -43,7 +45,8 @@ const LoginForm = (props)=>{
     const render = ()=>{
         if(isLogged){
             console.log('1232131');
-            return(<Redirect to='/' />)
+            window.location="/";
+            // return(<Redirect to='/' />)
         }
         else{
             return(
