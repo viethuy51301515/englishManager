@@ -5,6 +5,7 @@ import './event.scss';
 import {useState} from 'react';
 import marked from 'marked'
 import {eventRef} from '../../firebase';
+import { moment } from 'moment';
 const {TextArea} = Input;
 const Constant = {
     'TUADE':"td",
@@ -28,7 +29,7 @@ const Event = (props)=>{
         setText(text.value);
     }
     function changeDate(date, dateString) {
-        console.log(dateString);
+        setDate(dateString);
     }
     const saveEvent = ()=>{
         eventRef.push({
@@ -115,7 +116,7 @@ Ready to start writing?  Either start changing stuff on the left or
             <div className='edit-layout'>
                 <TextArea id='title-display'  placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 1, maxRows: 2 }}/>
                 <Input id='main-image' placeholder='hình ảnh lớn'></Input>
-                <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={changeDate}/>
+                <DatePicker showTime format="DD-MM-YYYY HH:mm:ss" onChange={changeDate}/>
                 <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 15, maxRows: 15 }}/>
                 <div className='group-buttons'>
                 <Button type="primary" size='small' onClick={()=>{buttonEvent(Constant.TUADE)}}>
