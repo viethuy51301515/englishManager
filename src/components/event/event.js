@@ -27,12 +27,12 @@ const getCurrentDate = ()=>{
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-    today = dd + '-' + mm + '-' + yyyy+" "+String(today.getHours)+":"+String(today.getMinutes)+":"+String(today.getSeconds);
+    today = dd + '-' + mm + '-' + yyyy+" "+today.getHours+":"+today.getMinutes+":"+today.getSeconds;
     return today;
 }
 const Event = (props)=>{
     const [text,setText] = useState("");
-    const [date,setDate] = useState(getCurrentDate());
+    const [date,setDate] = useState('');
     const [title,setTitle] = useState("");
     const [image,setImage] = useState("");
     const [type,setType] = useState("tt");
