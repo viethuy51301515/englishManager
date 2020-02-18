@@ -1,11 +1,11 @@
 import React from 'react';
-import {Input,Button,Popconfirm,DatePicker} from 'antd';
+import {Input,Button,Popconfirm,DatePicker, notification,Icon} from 'antd';
 
 import './event.scss';
 import {useState} from 'react';
 import marked from 'marked'
 import {eventRef} from '../../firebase';
-import { moment } from 'moment';
+import  moment  from 'moment';
 const {TextArea} = Input;
 const Constant = {
     'TUADE':"td",
@@ -20,24 +20,73 @@ const Constant = {
 marked.setOptions({
     breaks: true,
   });
+const getCurrentDate = ()=>{
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
 
+    today = dd + '-' + mm + '-' + yyyy+" "+String(today.getHours)+":"+String(today.getMinutes)+":"+String(today.getSeconds);
+    return today;
+}
 const Event = (props)=>{
     const [text,setText] = useState("");
-    const [date,setDate] = useState("");
+    const [date,setDate] = useState(getCurrentDate());
+    const [title,setTitle] = useState("");
+    const [image,setImage] = useState("");
+    const [id,setId] = useState("");
     const onChange = ()=>{
         var text = document.getElementById("text-display");
         setText(text.value);
+    }
+    const onChangeTitle = ()=>{
+        var text = document.getElementById("title-display");
+        setTitle(text.value);
+   
+    }
+    const onChangeImage = ()=>{
+        var text = document.getElementById("main-image");
+        setImage(text.value);
+    }
+    const searchId = ()=> {
+        var id = document.getElementById("idSearch").value;
+        eventRef.child(id).once('value').then(function(snapshot) {
+            var data = snapshot.val();
+            if(data == null){
+                return;
+            }
+            setText(data.content.split('\\n').join('\n'));
+            setTitle(data.title);
+            setImage(data.image);
+            setDate(data.date);
+       
+        })
     }
     function changeDate(date, dateString) {
         setDate(dateString);
     }
     const saveEvent = ()=>{
-        eventRef.push({
-            content:text.split("\n").join('\\n'),
-            date:date,
-            image:document.getElementById("main-image").value,
-            title:document.getElementById("title-display").value
-        });
+        var id = document.getElementById("idSearch").value;
+        if(id != ""){
+            eventRef.child(id).update({
+                content:text.split("\n").join('\\n'),
+                date:date,
+                image:document.getElementById("main-image").value,
+                title:document.getElementById("title-display").value
+            });
+        }
+        else{
+            eventRef.push({
+                content:text.split("\n").join('\\n'),
+                date:date,
+                image:document.getElementById("main-image").value,
+                title:document.getElementById("title-display").value
+            });
+        }
+        notification.success({
+            message:"Thông báo",
+            description:"Tin tức sự kiện đã được lưu thành công"
+        })
     }
     const genExample = ()=>{
         const test = `
@@ -114,9 +163,13 @@ Ready to start writing?  Either start changing stuff on the left or
     return(
         <div className='event-layout'>
             <div className='edit-layout'>
-                <TextArea id='title-display'  placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 1, maxRows: 2 }}/>
-                <Input id='main-image' placeholder='hình ảnh lớn'></Input>
-                <DatePicker showTime format="DD-MM-YYYY HH:mm:ss" onChange={changeDate}/>
+                <div className='search-box'>
+                    <Input id='idSearch' type="search"/>
+                    <Icon type="search" onClick={searchId}/>
+                </div>
+                <TextArea onChange={onChangeTitle} value={title} id='title-display'  placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 1, maxRows: 2 }}/>
+                <Input onChange={onChangeImage} value={image} id='main-image' placeholder='hình ảnh lớn'></Input>
+                <DatePicker value={moment(date, "DD-MM-YYYY HH:mm:ss")} showTime format="DD-MM-YYYY HH:mm:ss" onChange={changeDate}/>
                 <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 15, maxRows: 15 }}/>
                 <div className='group-buttons'>
                 <Button type="primary" size='small' onClick={()=>{buttonEvent(Constant.TUADE)}}>
