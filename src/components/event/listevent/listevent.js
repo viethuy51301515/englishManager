@@ -15,7 +15,8 @@ function EventList(props){
                     title:element.title ,
                     date:element.date ,
                     image:element.image ,
-                    id:childSnapShot.key
+                    id:childSnapShot.key,
+                    type:element.type =='tt' ? "Tin Tức" : "Sự Kiện" 
                 });
             })
             setListEvent(list);
@@ -32,8 +33,10 @@ function EventList(props){
     }
     const columns = [
         { title: 'TITLE', dataIndex: 'title', key: 'title' },
-        { title: 'DATE', dataIndex: 'date', key: 'date' },
+        { title: 'DATE', dataIndex: 'date', key: 'date',sorter: (a, b) => a.name.length - b.name.length, },
+        { title: 'TYPE', dataIndex: 'type', key: 'type',sorter: (a, b) => a.name.length - b.name.length,  },
         { title: 'ID', dataIndex: 'id', key: 'id' },
+        { title: 'Image', dataIndex: 'image', key: 'image',render: (text,record) => <div><img style={{height:'40px',width:"auto"}} src={record.image} ></img></div> },
         {
           title: '',
           dataIndex: '',

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input,Button,Popconfirm,DatePicker, notification,Icon} from 'antd';
+import {Input,Button,Popconfirm,DatePicker, notification,Icon,Select} from 'antd';
 
 import './event.scss';
 import {useState} from 'react';
@@ -17,6 +17,7 @@ const Constant = {
     'DSLK':'dslk',
     'LIENKET':'lk'
 }
+const {Option} = Select;
 marked.setOptions({
     breaks: true,
   });
@@ -34,7 +35,7 @@ const Event = (props)=>{
     const [date,setDate] = useState(getCurrentDate());
     const [title,setTitle] = useState("");
     const [image,setImage] = useState("");
-    const [id,setId] = useState("");
+    const [type,setType] = useState("tt");
     const onChange = ()=>{
         var text = document.getElementById("text-display");
         setText(text.value);
@@ -59,11 +60,15 @@ const Event = (props)=>{
             setTitle(data.title);
             setImage(data.image);
             setDate(data.date);
-       
+            setType(data.type);
         })
     }
     function changeDate(date, dateString) {
         setDate(dateString);
+    }
+    function onChangeType(value) {
+        setType(value);
+        console.log(type);
     }
     const saveEvent = ()=>{
         var id = document.getElementById("idSearch").value;
@@ -72,7 +77,8 @@ const Event = (props)=>{
                 content:text.split("\n").join('\\n'),
                 date:date,
                 image:document.getElementById("main-image").value,
-                title:document.getElementById("title-display").value
+                title:document.getElementById("title-display").value,
+                type:type
             });
         }
         else{
@@ -80,7 +86,8 @@ const Event = (props)=>{
                 content:text.split("\n").join('\\n'),
                 date:date,
                 image:document.getElementById("main-image").value,
-                title:document.getElementById("title-display").value
+                title:document.getElementById("title-display").value,
+                type:type
             });
         }
         notification.success({
@@ -164,12 +171,23 @@ Ready to start writing?  Either start changing stuff on the left or
         <div className='event-layout'>
             <div className='edit-layout'>
                 <div className='search-box'>
-                    <Input id='idSearch' type="search"/>
+                    <Input id='idSearch' type="search" placeholder='nhập id muốn chỉnh sửa'/>
                     <Icon type="search" onClick={searchId}/>
                 </div>
                 <TextArea onChange={onChangeTitle} value={title} id='title-display'  placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 1, maxRows: 2 }}/>
-                <Input onChange={onChangeImage} value={image} id='main-image' placeholder='hình ảnh lớn'></Input>
-                <DatePicker value={moment(date, "DD-MM-YYYY HH:mm:ss")} showTime format="DD-MM-YYYY HH:mm:ss" onChange={changeDate}/>
+                <div style={{display:"flex"}}>
+                    <div>
+                        <Input onChange={onChangeImage} value={image} id='main-image' placeholder='hình ảnh lớn'></Input>
+                        <DatePicker value={moment(date, "DD-MM-YYYY HH:mm:ss")} showTime format="DD-MM-YYYY HH:mm:ss" onChange={changeDate}/>
+                        <Select  onChange={onChangeType} value={type}>
+                            <Option value='sk'>Sự Kiện</Option>
+                            <Option value='tt'>Tin Tức</Option>
+                        </Select>
+                    </div>
+                    
+                    <img src={image} alt="" style={{height: "60px",maxWidth: "60px"}}/>
+                </div>
+
                 <TextArea id='text-display' value={text} onChange={onChange} placeholder="Nhập bài viết mới vào đây" autoSize autoSize={{ minRows: 15, maxRows: 15 }}/>
                 <div className='group-buttons'>
                 <Button type="primary" size='small' onClick={()=>{buttonEvent(Constant.TUADE)}}>
