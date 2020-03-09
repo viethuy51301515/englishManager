@@ -79,6 +79,12 @@ class MenuLeft extends React.Component{
                             <span>Content List</span>
                         </Link>
                     </Menu.Item>
+                    <Menu.Item key='teacher'>
+                        <Link to='/teacher'> 
+                            <Icon type='mail'></Icon>
+                            <span>Teacher List</span>
+                        </Link>
+                    </Menu.Item>
                 </Menu>
             </div>
         )

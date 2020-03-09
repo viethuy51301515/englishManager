@@ -11,6 +11,7 @@ import {login} from '../../action/action';
 import {BrowserRouter as Router, Switch,Route,Link,useRouteMatch,Redirect} from 'react-router-dom';
 import {useSelector,connect} from 'react-redux';
 import EventList from '../event/listevent';
+import EditableTable from '../teacher';
 const ProtectedRoute = ({component:Component,...rest})=>{
     const authUser = useSelector(state => state.login)
     // var email = localStorage.getItem("email");
@@ -50,6 +51,7 @@ class LayoutItem extends React.Component{
                             <ProtectedRoute exact path='/studentList' component={StudentList} />
                             <ProtectedRoute exact path='/editEvent' component={Event} />
                             <ProtectedRoute exact path='/eventList' component={EventList} />
+                            <ProtectedRoute exact path='/teacher' component={EditableTable} />
                         </Switch>                  
                         </div>
                     </div>
