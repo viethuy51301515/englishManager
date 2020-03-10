@@ -4,6 +4,7 @@ import {useDispatch,useSelector} from 'react-redux';
 import {useEffect,useState} from 'react'
 import {Table,Popconfirm,notification,Modal, Form, Icon, Input, Button, Upload, message} from 'antd';
 import {teacherRef} from '../../firebase';
+import {teacherStore} from '../../firebase';
 // import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 function getBase64(img, callback) {
@@ -41,7 +42,7 @@ class Avatar extends React.Component {
           imageUrl,
           loading: false,
         })
-        this.props.changeImg(imageUrl);
+        this.props.changeImg(info.file.originFileObj);
         }
       );
     }
@@ -73,45 +74,66 @@ class Avatar extends React.Component {
   }
 }
 const EdtitableTeacher = (props) =>{
-  const { getFieldDecorator } = props.form;
   // const {visible,setVisible} = useState(props.isVisible);
-  const [data,setData] = useState({});
+  const [data,setData] = useState({
+    name:"",
+    pos:"",
+    des:"",
+    id:""
+  });
+  
   const handleSubmit = ()=>{
-    // var id = document.getElementById("id").value;
-    //     if(id != ""){
-    //       teacherRef.child(id).update({
-    //             name:data.name,
-    //             pos:data.pos,
-    //             des:data.des,
-    //         });
-    //     }
-    //     else{
-    //       teacherRef.push({
-    //           name:data.name,
-    //           pos:data.pos,
-    //           des:data.des,
-    //         });
-    //     }
-    //     props.reload();
+    var id = document.getElementById("id").value;
+        if(id != ""){
+          teacherRef.child(id).update({
+                name:data.name,
+                pos:data.pos,
+                des:data.des,
+            });
+        }
+        else{
+          teacherRef.push({
+              name:data.name,
+              pos:data.pos,
+              des:data.des,
+            });
+        }
+      teacherStore.child("1").put(data.image).then(function(snapshot) {
+        console.log('Uploaded a blob or file!');
+      });
+        props.reload();
   }
   const changeValue = (id) =>{
-    data[id] = document.getElementById(id).value;
-    console.log(data);
-    setData(data);
+    var dataTemp = {
+      name: id =='name' ? document.getElementById("name").value : data.name,
+      pos:id =='pos' ? document.getElementById("pos").value : data.pos,
+      des:id =='des' ? document.getElementById("des").value : data.des,
+      id:data.id,
+      image:data.image
+    }
+    setData(dataTemp);
   }
   const changeImg = (image) =>{
-    data['image'] = image;
-    setData(data);
+
+    var dataTemp = {
+      name: data.name,
+      pos:data.pos,
+      des:data.des,
+      id:data.id,
+      image:image
+    }
+    setData(dataTemp);
+    console.log(dataTemp);
   }
   useEffect(()=>{
-    var data = {
+    var dataTemp = {
       "name":props.data.name,
       "pos":props.data.pos,
       "des":props.data.des,
       "id":props.data.id,
     }
     console.log("uf"+props.data.name);
-    setData(data);
+    setData(dataTemp);
   },[props.data])
   return(
     <div>
@@ -122,16 +144,11 @@ const EdtitableTeacher = (props) =>{
                 onOk={() => props.setModalVisible(false)}
                 onCancel={() => props.setModalVisible(false)}
                 >
-                <Form onSubmit={handleSubmit} className="login-form" className='loginForm'>
-            <Form.Item height='100'>
             
                 <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder="Name" id='name' value={data.name} onChange={() =>  changeValue("name")}
                 />
-            
-            </Form.Item>
-            <Form.Item>
                 <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 id='pos'
@@ -139,8 +156,6 @@ const EdtitableTeacher = (props) =>{
                 value={data.pos}
                 onChange={() =>  changeValue("pos")}
                 />
-            </Form.Item>
-            <Form.Item>
                 <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 id='des'
@@ -148,11 +163,7 @@ const EdtitableTeacher = (props) =>{
                 value={data.des}
                 onChange={() =>  changeValue("des")}
                 />
-            </Form.Item>
-            <Form.Item>
             <Avatar changeImg={changeImg} />
-            </Form.Item>
-            <Form.Item >
                 <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 id='id'
@@ -160,18 +171,13 @@ const EdtitableTeacher = (props) =>{
                 value={data.id}
                 onChange={() =>  changeValue("id")}
                 />
-            </Form.Item>
-            <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-form-button">
+            <Button type="primary" htmlType="submit" className="login-form-button" onClick={handleSubmit}>
                 Save
             </Button>
-            </Form.Item>
-        </Form>
         </Modal>
     </div>
   )
 }
-const Edtitable = Form.create({ name: 'normal_login' })(EdtitableTeacher);
 function Teacher(props){
     const data = useSelector(state => state.dataRe);
     const [selectedData,setSelectedData] = useState({});
@@ -221,7 +227,7 @@ function Teacher(props){
                
                 dataSource={listTeacher}
             />
-            <Edtitable reload={changeReload} data={selectedData} isVisible={isShowModal} setModalVisible={setModalVisible}></Edtitable>
+            <EdtitableTeacher reload={changeReload} data={selectedData} isVisible={isShowModal} setModalVisible={setModalVisible} />
         </div>
     )
 }

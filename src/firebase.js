@@ -13,5 +13,6 @@ firebase.initializeApp(config);
 const databaseRef = firebase.database().ref();
 export const eventRef = databaseRef.child("news_event");
 export const teacherRef = databaseRef.child("teacherList");
+export const teacherStore = firebase.storage().ref('teacherImg');
 export const authLogin = firebase.auth();
 
