@@ -75,11 +75,24 @@ class Avatar extends React.Component {
 const EdtitableTeacher = (props) =>{
   const { getFieldDecorator } = props.form;
   // const {visible,setVisible} = useState(props.isVisible);
-  const [data,setData] = useState({
-
-  });
+  const [data,setData] = useState({});
   const handleSubmit = ()=>{
-    
+    // var id = document.getElementById("id").value;
+    //     if(id != ""){
+    //       teacherRef.child(id).update({
+    //             name:data.name,
+    //             pos:data.pos,
+    //             des:data.des,
+    //         });
+    //     }
+    //     else{
+    //       teacherRef.push({
+    //           name:data.name,
+    //           pos:data.pos,
+    //           des:data.des,
+    //         });
+    //     }
+    //     props.reload();
   }
   const changeValue = (id) =>{
     data[id] = document.getElementById(id).value;
@@ -97,7 +110,7 @@ const EdtitableTeacher = (props) =>{
       "des":props.data.des,
       "id":props.data.id,
     }
-    console.log(props.data.name);
+    console.log("uf"+props.data.name);
     setData(data);
   },[props.data])
   return(
@@ -115,7 +128,7 @@ const EdtitableTeacher = (props) =>{
                 <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder="Name" id='name' value={data.name} onChange={() =>  changeValue("name")}
-                />,
+                />
             
             </Form.Item>
             <Form.Item>
@@ -125,7 +138,7 @@ const EdtitableTeacher = (props) =>{
                 placeholder="Position"
                 value={data.pos}
                 onChange={() =>  changeValue("pos")}
-                />,
+                />
             </Form.Item>
             <Form.Item>
                 <Input
@@ -134,7 +147,7 @@ const EdtitableTeacher = (props) =>{
                 placeholder="Description"
                 value={data.des}
                 onChange={() =>  changeValue("des")}
-                />,
+                />
             </Form.Item>
             <Form.Item>
             <Avatar changeImg={changeImg} />
@@ -146,7 +159,7 @@ const EdtitableTeacher = (props) =>{
                 placeholder="id"
                 value={data.id}
                 onChange={() =>  changeValue("id")}
-                />,
+                />
             </Form.Item>
             <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button">
@@ -164,6 +177,7 @@ function Teacher(props){
     const [selectedData,setSelectedData] = useState({});
     const [isShowModal,setShowModal] = useState(false);
     const [listTeacher,setListTeacher] = useState([]);
+    const [isReload,setReload] = useState(false);
     useEffect(()=>{
       teacherRef.orderByChild('name').once('value',function(snapshot) {
           var list = [];
@@ -178,8 +192,12 @@ function Teacher(props){
               });
           })
           setListTeacher(list);
+          console.log("!23");
       })
-    },[listTeacher]);
+    },[isReload]);
+    const changeReload = ()=>{
+      setReload(!isReload);
+    }
     const columns = [
         { title: 'NAME', dataIndex: 'name', key: 'name',editable: true },
         { title: 'POSITION', dataIndex: 'pos', key: 'pos',sorter: (a, b) => a.name.length - b.name.length, },
@@ -203,7 +221,7 @@ function Teacher(props){
                
                 dataSource={listTeacher}
             />
-            <Edtitable data={selectedData} isVisible={isShowModal} setModalVisible={setModalVisible}></Edtitable>
+            <Edtitable reload={changeReload} data={selectedData} isVisible={isShowModal} setModalVisible={setModalVisible}></Edtitable>
         </div>
     )
 }
