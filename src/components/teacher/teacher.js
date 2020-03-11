@@ -5,7 +5,7 @@ import {useEffect,useState} from 'react'
 import {Table,Popconfirm,notification,Modal, Form, Icon, Input, Button, Upload, message} from 'antd';
 import {teacherRef} from '../../firebase';
 import {teacherStore} from '../../firebase';
-// import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+// import { LoadingOutlined, PlusOutlined,UserAddOutlined } from '@ant-design/icons';
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -84,11 +84,22 @@ const EdtitableTeacher = (props) =>{
   
   const handleSubmit = ()=>{
     var id = document.getElementById("id").value;
+    var timeTime = new Date().getTime();
         if(id != ""){
-          teacherRef.child(id).update({
+          teacherRef.child(data.key).update({
                 name:data.name,
                 pos:data.pos,
                 des:data.des,
+                image: id,
+                id:id,
+            });
+            notification.success({
+              message: 'Tựa đề thông báo',
+              description:
+                  'Bạn đã lưu dữ liệu thành công'
+              })
+            teacherStore.child(id).put(data.image).then(function(snapshot) {
+              console.log('Uploaded a blob or file!');
             });
         }
         else{
@@ -96,12 +107,25 @@ const EdtitableTeacher = (props) =>{
               name:data.name,
               pos:data.pos,
               des:data.des,
+              image:timeTime,
+              id:timeTime,
+            });
+          notification.success({
+          message: 'Tựa đề thông báo',
+          description:
+              'Bạn đã lưu dữ liệu thành công'
+          })
+            teacherStore.child(timeTime).put(data.image).then(function(snapshot) {
+              console.log('Uploaded a blob or file!');
             });
         }
-      teacherStore.child("1").put(data.image).then(function(snapshot) {
-        console.log('Uploaded a blob or file!');
-      });
-        props.reload();
+        // notification.success({
+        //   message: 'Tựa đề thông báo',
+        //   description:
+        //       'Bạn đã lưu dữ liệu thành công'
+        //   })
+      // window.location="/teacher";
+      
   }
   const changeValue = (id) =>{
     var dataTemp = {
@@ -109,7 +133,8 @@ const EdtitableTeacher = (props) =>{
       pos:id =='pos' ? document.getElementById("pos").value : data.pos,
       des:id =='des' ? document.getElementById("des").value : data.des,
       id:data.id,
-      image:data.image
+      image:data.image,
+      key:data.key
     }
     setData(dataTemp);
   }
@@ -120,7 +145,8 @@ const EdtitableTeacher = (props) =>{
       pos:data.pos,
       des:data.des,
       id:data.id,
-      image:image
+      image:image,
+      key:data.key
     }
     setData(dataTemp);
     console.log(dataTemp);
@@ -131,6 +157,7 @@ const EdtitableTeacher = (props) =>{
       "pos":props.data.pos,
       "des":props.data.des,
       "id":props.data.id,
+      "key":props.data.key
     }
     console.log("uf"+props.data.name);
     setData(dataTemp);
@@ -142,7 +169,7 @@ const EdtitableTeacher = (props) =>{
                 footer=''
                 title='Thông tin giáo viên'
                 onOk={() => props.setModalVisible(false)}
-                onCancel={() => props.setModalVisible(false)}
+                onCancel={() => {props.setModalVisible(false);window.location='/teacher'}}
                 >
             
                 <Input
@@ -184,31 +211,85 @@ function Teacher(props){
     const [isShowModal,setShowModal] = useState(false);
     const [listTeacher,setListTeacher] = useState([]);
     const [isReload,setReload] = useState(false);
-    useEffect(()=>{
-      teacherRef.orderByChild('name').once('value',function(snapshot) {
-          var list = [];
-          snapshot.forEach(function(childSnapShot) {
-              var element = childSnapShot.val();
-              list.push({
-                  name:element.name ,
-                  pos:element.pos ,
-                  des: element.des,
-                  id:childSnapShot.key,
-                  image:element.image 
-              });
+    const  getListImg = async (listI) => {
+      var listRef = teacherStore;
+      var data = await new Promise(function(resolve) {
+          listRef.listAll().then(function(res){
+              resolve(res);
+          });
+      });
+      var list = [];
+      for (let i = 0; i < data.items.length; i++) {
+          const element = data.items[i];
+          var item = await new Promise(function(resolve) {
+              element.getDownloadURL().then(function(res) {
+              resolve(res);
+              
           })
-          setListTeacher(list);
-          console.log("!23");
+          });
+          list.push({
+
+            image:item,
+            id:element.name
+          }
+            );
+      }
+      var listTemp = [...listI];
+      listTemp.map(item =>  {
+        var subItem = list.filter(sub => sub.id == item.id);
+        if(subItem.length > 0){
+          item.image = subItem[0].image;
+        }
+        return item;
       })
-    },[isReload]);
+      setListTeacher(listTemp);
+      
+    }
+    useEffect( async ()=>{
+      var list = [];
+      await teacherRef.orderByChild('name').once('value',function(snapshot) {
+    
+          snapshot.forEach( function(childSnapShot) {
+              var element = childSnapShot.val();
+              var item = {
+                name:element.name ,
+                pos:element.pos ,
+                des: element.des,
+                id:element.id,
+                image:element.image,
+                key:childSnapShot.key
+            }
+            list.push(item);
+              
+          })
+      });
+      getListImg(list);
+    },[]);
     const changeReload = ()=>{
       setReload(!isReload);
     }
+    const handleDelete = (key,id)=>{
+      // setReload(!isReload);
+
+      teacherRef.child(key).remove();
+      // teacherStore.child(id).delete().then(function() {
+      //   // File deleted successfully
+      // }).catch(function(error) {
+      //   // Uh-oh, an error occurred!
+      // });
+      notification.success({
+          message: 'Tựa đề thông báo',
+          description:
+              'Bạn đã xóa sự kiện thành công'
+          })
+      window.location="/teacher";
+  }
     const columns = [
         { title: 'NAME', dataIndex: 'name', key: 'name',editable: true },
         { title: 'POSITION', dataIndex: 'pos', key: 'pos',sorter: (a, b) => a.name.length - b.name.length, },
         { title: 'DESCRIPTION', dataIndex: 'des', key: 'des',sorter: (a, b) => a.name.length - b.name.length,  },
         { title: 'ID', dataIndex: 'id', key: 'id' },
+        { title: 'KEY', dataIndex: 'key', key: 'key' },
         { title: 'Image', dataIndex: 'image', key: 'image',render: (text,record) => <div><img style={{height:'40px',width:"auto"}} src={record.image} ></img></div> },
         {
           title: '',
@@ -216,12 +297,19 @@ function Teacher(props){
           key: 'x',
           render: (text,record) => <Popconfirm title='Bạn có muốn xóa sự kiện này không' placement='topRight' onConfirm={()=> {setSelectedData(record);setShowModal(true)}} okText="Yes" cancelText="No"><a>Edit</a></Popconfirm>,
         },
+        {
+          title: '',
+          dataIndex: '',
+          key: 'x',
+          render: (text,record) => <Popconfirm title='Bạn có muốn xóa sự kiện này không' placement='topRight' onConfirm={()=> handleDelete(record.key,record.id)} okText="Yes" cancelText="No"><a>Delete</a></Popconfirm>,
+        },
       ];
       const setModalVisible = (visible) =>{
         setShowModal(visible);
       }
     return(
         <div className='event-list'>
+          <Button type="primary" onClick={()=>{setSelectedData({});setShowModal(true)}} >Add</Button>
             <Table
                 columns={columns}
                
